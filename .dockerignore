@@ -1,0 +1,9 @@
+__pycache__
+sports-classifier-data
+.venv
+.gitignore
+tb_callback_dir
+test.png
+training_results
+inference_results
+
