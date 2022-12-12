@@ -9,5 +9,6 @@ link to dataset: https://www.kaggle.com/datasets/gpiosenka/sports-classification
 place test, train, valid folders from download link above into a folder called sports-classifier-data in root directory
 
 train.py for training
+
 inference.py for testing the model on test examples
 
