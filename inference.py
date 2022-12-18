@@ -77,8 +77,6 @@ def predict_on_image(model, image_url, class_name_dict):
     pred_class = np.argmax(pred)
     return class_name_dict[pred_class]
 
-
-
 if __name__ == '__main__':
 
     test_ds = image_dataset_from_directory("./sports-classifier-data/test", batch_size=batch_size, image_size=(IMAGE_SIZE,IMAGE_SIZE), seed=56)
