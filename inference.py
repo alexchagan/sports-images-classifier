@@ -12,16 +12,11 @@ from utilities import makefolder
 batch_size = 16
 IMAGE_SIZE = 224
 
-def load_image(path, image_size=(224, 224), num_channels=3, interpolation='bilinear',
-               crop_to_aspect_ratio=False):
+def load_image(path, image_size=(224, 224), num_channels=3, interpolation='bilinear'):
   """Load an image from a path and resize it."""
   img = tf.io.read_file(path)
-  img = tf.image.decode_image(
-      img, channels=num_channels, expand_animations=False)
-  if crop_to_aspect_ratio:
-    img = image_utils.smart_resize(img, image_size, interpolation=interpolation)
-  else:
-    img = tf.image.resize(img, image_size, method=interpolation)
+  img = tf.image.decode_image(img, channels=num_channels, expand_animations=False)
+  img = tf.image.resize(img, image_size, method=interpolation)
   img.set_shape((image_size[0], image_size[1], num_channels))
   return img
 
@@ -75,11 +70,12 @@ def create_class_to_name_dict(test_ds):
     return class_name_dict
 
 def predict_on_image(model, image_url, class_name_dict):
+
     image = load_image(path=image_url) # preprocessing
     image = np.expand_dims(image, axis=0) # the model was trained on batches so we need to expand to (1,244,244,3)
     pred = model.predict(image)
-    pred_class = np.argmax(pred, axis=-1)
-    return class_name_dict[pred_class[0]]
+    pred_class = np.argmax(pred)
+    return class_name_dict[pred_class]
 
 
 
@@ -88,9 +84,9 @@ if __name__ == '__main__':
     test_ds = image_dataset_from_directory("./sports-classifier-data/test", batch_size=batch_size, image_size=(IMAGE_SIZE,IMAGE_SIZE), seed=56)
     model = keras.models.load_model('training_results/best.h5')
     class_name_dict = create_class_to_name_dict(test_ds)
-    predictor(model, test_ds)
-    # ans = predict_on_image(model, "test.png", class_name_dict)
-    # print(ans)
+    # predictor(model, test_ds)
+    ans = predict_on_image(model, "test.jpg", class_name_dict)
+    print(ans)
     
 
     
