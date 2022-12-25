@@ -9,6 +9,7 @@ Dataset split is 12000,500,500 for train,val,test
 link to dataset: https://www.kaggle.com/datasets/gpiosenka/sports-classification/download?datasetVersionNumber=8
 
 --download_data parameter is false on default because it downloads from a googlecloud bucket
+
 place test, train, valid folders from download link above into a folder called sports-classifier-data in root directory
 
 train.py for training
