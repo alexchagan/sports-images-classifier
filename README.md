@@ -24,7 +24,7 @@ The model reaches 0.99 accuracy on test.
 
 ### Built With
 
-* [![TensorFlow][TensorFlow.org]][TensorFlow-url]
+* [![TensorFlow][TensorFlow.js]][TensorFlow-url]
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -84,4 +84,5 @@ Project Link: [https://github.com/alexchagan/sports-images-classifier](https://g
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
 [linkedin-url]: https://www.linkedin.com/in/alex-chagan-a243221b6/
 [TensorFlow-url]: https://www.tensorflow.org/
+[TensorFlow.js]: https://avatars.githubusercontent.com/u/28029853?s=280&v=4
 
