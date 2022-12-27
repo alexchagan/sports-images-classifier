@@ -24,7 +24,7 @@ The model reaches 0.99 accuracy on test.
 
 ### Built With
 
-* [![TensorFlow][TensorFlow.org]][TensorFlow.org]
+* [![TensorFlow][TensorFlow.org]][TensorFlow-url]
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
