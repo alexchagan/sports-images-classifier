@@ -1,6 +1,6 @@
 
 
-[![LinkedIn][linkedin-shield]][https://www.linkedin.com/in/alex-chagan-a243221b6/]
+[![LinkedIn][linkedin-shield]][linkedin-url]
 
 <!-- PROJECT LOGO -->
 <br />
@@ -41,7 +41,7 @@ Download the kaggle dataset from: https://www.kaggle.com/datasets/gpiosenka/spor
 
 1. Clone the repo
    ```
-   git clone https://github.com/your_username_/Project-Name.git
+   git clone https://https://github.com/alexchagan/sports-images-classifier.git
    ```
 2. Install requirements
    ```
@@ -75,10 +75,13 @@ Download the kaggle dataset from: https://www.kaggle.com/datasets/gpiosenka/spor
 
 Alex Chagan  - alexchagan95@gmail.com
 
-Project Link: [https://github.com/your_username/repo_name](https://github.com/alexchagan/sports-images-classifier)
+Project Link: [https://github.com/alexchagan/sports-images-classifier](https://github.com/alexchagan/sports-images-classifier)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-
-
+<!-- MARKDOWN LINKS & IMAGES -->
+<!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
+[linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
+[linkedin-url]: https://www.linkedin.com/in/alex-chagan-a243221b6/
+[TensorFlow-url]: https://www.tensorflow.org/
 
