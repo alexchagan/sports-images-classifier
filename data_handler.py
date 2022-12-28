@@ -6,6 +6,20 @@ path_to_credentials = './credentials/feisty-album-369005-086941277569.json'
 
 def list_blobs(bucket_name):
 
+    '''Creates a list of blobs from a gcp storage bucket
+    
+    Parameters
+    ----------
+    bucket_name : string
+        The name of the bucket in the gcp storage
+
+    Returns
+    ----------
+    list_blobs : Sequential
+        List of blobs
+
+    '''
+
     storage_client = storage.Client.from_service_account_json(path_to_credentials)
 
     blobs = storage_client.list_blobs(bucket_name)
@@ -13,6 +27,18 @@ def list_blobs(bucket_name):
     return blobs
 
 def download_data_to_local_directory(bucket_name, local_dir):
+
+    '''Downloads data from a gcp storage bucket into a local directory in the project
+    
+    Parameters
+    ----------
+    bucket_name : string
+        The name of the bucket in the gcp storage
+    
+    local_dir : string
+        The name of the local directory the data will be downloaded into 
+
+    '''
 
     storage_client = storage.Client.from_service_account_json(path_to_credentials)
     blobs = storage_client.list_blobs(bucket_name)

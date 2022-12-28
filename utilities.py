@@ -7,6 +7,18 @@ import os
 
 def class_distribution_plt(train_df, column_name):
     
+    '''Plots distribution of classes in the training dataframe and saves it as a jpg 
+       in training_results folder
+    
+    Parameters
+    ----------
+    train_df : dataframe
+        A dataframe of the training data
+    column_name : string
+        The name of the column that represents the label names
+
+    '''
+
     sns.countplot(y=train_df[column_name])
     plt.title('Images per Sports',)
     plt.ylabel('Number of images')
@@ -15,6 +27,18 @@ def class_distribution_plt(train_df, column_name):
     plt.savefig('training_results/class_distribution.jpg')
 
 def class_distribution_print_and_csv(train_df, column_name):
+
+    '''Prints the class distribution in console and saves it as a csv file 
+       in training_results folder
+    
+    Parameters
+    ----------
+    train_df : dataframe
+        A dataframe of the training data
+    column_name : string
+        The name of the column that represents the label names
+
+    '''
 
     classes = train_df[column_name].unique()
     class_count = len(classes)
@@ -40,7 +64,17 @@ def class_distribution_print_and_csv(train_df, column_name):
 
 def tr_plot(tr_data, start_epoch):
 
-    #Plot the training and validation data
+    '''Plots Loss and Accuracy graphs for training and validation.
+       saves it as jpg in training_results folder
+       
+    Parameters
+    ----------
+    tr_data : history object from model.fit
+        History of all the training data accumulated during the training phase
+    start_epoch : int
+        The starting epoch of the plot
+
+    '''
 
     tacc=tr_data.history['accuracy']
     tloss=tr_data.history['loss']
@@ -77,7 +111,16 @@ def tr_plot(tr_data, start_epoch):
     plt.show()
 
 def makefolder(path):
-
+    
+    '''Makes a folder in a certain path if it doesn't exist already
+       
+    Parameters
+    ----------
+    path : string
+        Path for the new folder
+   
+    '''
+    
     # checking if the directory demo_folder 
     # exist or not.
     if not os.path.exists(path):

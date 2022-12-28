@@ -23,6 +23,19 @@ def load_image(path, image_size=(224, 224), num_channels=3, interpolation='bilin
 
 def predictor(model, test_ds):
 
+    '''Predicts on the test dataset and compares the results to the ground truth.
+       Writes results to a csv file and saves it in the inference_results folder.
+       Creates and saves a confusion matrix in the inference_results folder. 
+    
+    Parameters
+    ----------
+    model : Sequential
+        A trained model  
+    test_ds : tf.data.Dataset
+        Test dataset
+   
+    '''
+
     y_true = []
     y_pred = []
 
@@ -61,6 +74,20 @@ def predictor(model, test_ds):
     plt.savefig('inference_results/matrix.jpg')
 
 def create_class_to_name_dict(test_ds):
+    
+    '''Creates a dict with keys - lass integer values, values - names of classes  
+    
+    Parameters
+    ---------- 
+    test_ds : tf.data.Dataset
+        Test dataset
+
+    Returns
+    ----------
+    class_name_dict : dict
+        Integer to class name dict
+
+    '''
     classes = test_ds.class_names
     class_name_dict = {}
     index = 0

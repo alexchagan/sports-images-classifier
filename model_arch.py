@@ -24,9 +24,25 @@ data_augment.add(RandomZoom(0.2))
 
 def custom_model(image_size, num_classes):
 
+    '''A custom CNN architecture, consists of some convolution layers and max-pooling layers
+    
+    Parameters
+    ----------
+    image_size : int
+        The size of image, height and width are same value
+    num_class : int
+        The number of classes for prediction
+
+    Returns
+    ----------
+    model : Sequential
+        A conifugred model ready for training
+
+    '''
+
     model = Sequential()
     model.add(Rescaling(1./255, input_shape=(image_size, image_size, 3)))
-    model.add(rescale)
+    model.add(data_augment)
     model.add(Conv2D(16, kernel_size=3, padding='same', activation='relu'))
     model.add(MaxPool2D(pool_size=2))
     model.add(Conv2D(32, kernel_size=3, padding='same', activation='relu'))
@@ -47,8 +63,22 @@ def custom_model(image_size, num_classes):
     return model
 
 
-def vgg_model(image_size, num_classes):
+def vgg_model(num_classes):
 
+    '''An architecture based on pretrained VGG16 CNN
+    
+    Parameters
+    ----------
+    num_class : int
+        The number of classes for prediction
+
+    Returns
+    ----------
+    model : Sequential
+        A conifugred model ready for training
+
+    '''
+    
     vgg = VGG16(include_top = False, weights='imagenet')
     for layer in vgg.layers:
         layer.trainable = False
@@ -66,7 +96,22 @@ def vgg_model(image_size, num_classes):
     return model
 
 def enetb3_model(image_size, num_classes):
+    
+    '''An architecture based on pretrained EnetB3 CNN
+    
+    Parameters
+    ----------
+    image_size : int
+        The size of image, height and width are same value
+    num_class : int
+        The number of classes for prediction
 
+    Returns
+    ----------
+    model : Sequential
+        A conifugred model ready for training
+
+    '''
     # Normalization is included in the as part of the model, rescaling to [0,1] is not needed.
     b3 = EfficientNetB3(include_top=False, weights='imagenet',pooling='max', input_shape=(image_size,image_size,3))
     b3.trainable = True

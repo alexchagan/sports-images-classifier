@@ -17,7 +17,6 @@ from tensorflow import keras
 warnings.filterwarnings(action='ignore',category=DeprecationWarning)
 warnings.filterwarnings(action='ignore',category=FutureWarning)
 
-model_type = 'enetb3'
 num_classes = 100
 IMAGE_SIZE = 224
 
@@ -25,6 +24,22 @@ print("Tensorflow is running on following devices : ")
 print(device_lib.list_local_devices())
 
 def prepare_dataset(visualize, batch_size):
+
+    '''Prepares the datasets for training and validation and prints class distribution  
+    
+    Parameters
+    ----------
+    visualize : boolean
+        A flag for showing some examples from the dataset, images and their labels
+    batch_size : int
+        The batch size for model input, training and validation 
+
+    Returns
+    ----------
+    train_ds, valid_ds, test_ds : tf.data.Dataset
+        Dataset objects that yield batches of images with corresponding labels
+
+    '''
 
     # IMPORTING DATASETS
     train_ds=image_dataset_from_directory("./sports-classifier-data/train",batch_size=batch_size,image_size=(IMAGE_SIZE,IMAGE_SIZE),seed=56)
@@ -63,7 +78,23 @@ def prepare_dataset(visualize, batch_size):
     return train_ds, valid_ds, test_ds
 
 
-def model_definition(num_classes):
+def model_definition(num_classes, model_type):
+
+    '''Defines a compiled model architecture based on the stated model type   
+    
+    Parameters
+    ----------
+    num_classes : int
+        Number of classes for prediction and size of the output layer
+    model_type : string
+        The name of the model architecture (custom, vgg, enetb3)
+
+    Returns
+    ----------
+    model : Sequential
+        A conifugred model ready for training
+
+    '''
 
     if model_type == 'custom':
         model = custom_model(image_size=IMAGE_SIZE, num_classes=num_classes)
@@ -78,14 +109,32 @@ def model_definition(num_classes):
 
     return model
 
-def trainer(num_classes, epochs, train_ds, valid_ds, gcp):
+def trainer(model_type, num_classes, epochs, train_ds, valid_ds, gcp):
+
+    '''Trains a CNN model based on the requested architecture 
     
+    Parameters
+    ----------
+    model_type : string
+        The name of the model architecture (custom, vgg, enetb3)
+    num_classes : int
+        Number of classes for prediction and size of the output layer
+    epochs : int
+        Number of epochs for training
+    train_ds : tf.data.Dataset
+        Train dataset
+    valid_ds : tf.data.Dataset
+        Validation dataset
+    gcp : boolean
+        Flag for training on gcp platform
+
+    '''
    
     #---------------------------
     # MODEL DEFENITIONS
     #---------------------------
     
-    model = model_definition(num_classes=num_classes)
+    model = model_definition(num_classes=num_classes, model_type=model_type)
     
     #---------------------------
     # SETTING UP CALLBACKS 
@@ -140,7 +189,9 @@ if __name__ == '__main__':
 
     train_ds, valid_ds, test_ds = prepare_dataset(visualize=False, batch_size=args.batch_size)
 
-    trainer(num_classes=num_classes, train_ds=train_ds, valid_ds=valid_ds, epochs=args.epochs, gcp=args.gcp_training)
+    model_type = 'enetb3'
+
+    trainer(model_type=model_type,num_classes=num_classes, train_ds=train_ds, valid_ds=valid_ds, epochs=args.epochs, gcp=args.gcp_training)
 
     model = keras.models.load_model('training_results/best.h5')
 
