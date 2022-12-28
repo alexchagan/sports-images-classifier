@@ -18,6 +18,8 @@ An image classification project on 100 classes of sport genres. Uses a pretraine
 The dataset was taken from kaggle and it contains 13000 images with a split of 12000,500,500 for train, val, test.  
 The model reaches 0.99 accuracy on test.
 
+![alt text](https://i.ibb.co/kxW0jcy/results-13-0.png)
+
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
@@ -67,8 +69,6 @@ Download the kaggle dataset from: https://www.kaggle.com/datasets/gpiosenka/spor
   ```
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-![alt text](https://i.ibb.co/kxW0jcy/results-13-0.png)
 
 <!-- CONTACT -->
 ## Contact
