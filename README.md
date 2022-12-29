@@ -84,5 +84,5 @@ Project Link: [https://github.com/alexchagan/sports-images-classifier](https://g
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
 [linkedin-url]: https://www.linkedin.com/in/alex-chagan-a243221b6/
 [TensorFlow-url]: https://www.tensorflow.org/
-[TensorFlow.js]: https://data.apkbe.com/5d/cc.nextlabs.tensorflow/1.0.3/icon.png!s
+[TensorFlow.js]: https://img.shields.io/badge/-TensorFlow-orange
 
