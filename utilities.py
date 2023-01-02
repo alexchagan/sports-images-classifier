@@ -24,7 +24,7 @@ def class_distribution_plt(train_df, column_name):
     plt.ylabel('Number of images')
     plt.xlabel('Sports Name')
     plt.tight_layout()
-    plt.savefig('training_results/class_distribution.jpg')
+    plt.savefig('class_distribution.jpg')
 
 def class_distribution_print_and_csv(train_df, column_name):
 
