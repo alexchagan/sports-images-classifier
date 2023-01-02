@@ -49,7 +49,7 @@ Download the kaggle dataset from: https://www.kaggle.com/datasets/gpiosenka/spor
    ```
 2. Install requirements
    ```
-   pip install -r requirements
+   pip install -r requirements.txt
    ```
 3. Place the train,val,test folders you downloaded from kaggle into sports-classifier-data folder 
 
