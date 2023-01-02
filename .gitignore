@@ -1,5 +1,7 @@
 *.Identifier
 *.json
+*.jpg
+*.png
 
 # Directories
 training_results/
