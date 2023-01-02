@@ -19,6 +19,7 @@ The dataset was taken from kaggle and it contains 13000 images with a split of 1
 The model reaches 0.99 accuracy on test. <br />
 A list of all sports can be found in 'sports-classifier-data/class_dict.csv'.
 
+
 ![alt text](https://i.ibb.co/kxW0jcy/results-13-0.png)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
