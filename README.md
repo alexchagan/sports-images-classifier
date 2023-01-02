@@ -14,9 +14,11 @@
 
 <!-- ABOUT THE PROJECT -->
 ## About The Project
-An image classification project on 100 classes of sport genres. Uses a pretrained CNN EfficientNetB3 as base with fully connected layer for training. 
-The dataset was taken from kaggle and it contains 13000 images with a split of 12000,500,500 for train, val, test.  
-The model reaches 0.99 accuracy on test.
+An image classification project on 100 classes of sport genres. Uses a pretrained CNN EfficientNetB3 as base with fully connected layer for training. <br />
+The dataset was taken from kaggle and it contains 13000 images with a split of 12000,500,500 for train, val, test. <br />
+The model reaches 0.99 accuracy on test. <br />
+A list of all sports can be found in 'sports-classifier-data/class_dict.csv'.
+
 
 ![alt text](https://i.ibb.co/kxW0jcy/results-13-0.png)
 
@@ -43,7 +45,7 @@ Download the kaggle dataset from: https://www.kaggle.com/datasets/gpiosenka/spor
 
 1. Clone the repo
    ```
-   git clone https://https://github.com/alexchagan/sports-images-classifier.git
+   git clone https://github.com/alexchagan/sports-images-classifier.git
    ```
 2. Install requirements
    ```
