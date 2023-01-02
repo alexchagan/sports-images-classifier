@@ -45,7 +45,7 @@ Download the kaggle dataset from: https://www.kaggle.com/datasets/gpiosenka/spor
 
 1. Clone the repo
    ```
-   git clone https://https://github.com/alexchagan/sports-images-classifier.git
+   git clone https://github.com/alexchagan/sports-images-classifier.git
    ```
 2. Install requirements
    ```
