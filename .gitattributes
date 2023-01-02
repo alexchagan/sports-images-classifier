@@ -1,0 +1,3 @@
+sports-classifier-data/train filter=lfs diff=lfs merge=lfs -text
+sports-classifier-data/test filter=lfs diff=lfs merge=lfs -text
+sports-classifier-data/valid filter=lfs diff=lfs merge=lfs -text
