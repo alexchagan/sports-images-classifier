@@ -75,7 +75,7 @@ Download the kaggle dataset from: https://www.kaggle.com/datasets/gpiosenka/spor
 <!-- CONTACT -->
 ## Contact
 
-Alex Chagan  - alexchagan95@gmail.com
+Alex Chagan  -- alexchagan95@gmail.com
 
 Project Link: [https://github.com/alexchagan/sports-images-classifier](https://github.com/alexchagan/sports-images-classifier)
 
