@@ -67,14 +67,7 @@ def prepare_dataset(visualize, batch_size):
             print(image_batch.shape)
             print(labels_batch.shape)
             break
-
-    ############## FAST PROCESSING  (NOT STABLE) ############### 
-    ############################################################      
-    # AUTOTUNE = tf.data.AUTOTUNE
-    # train_ds = train_ds.cache().prefetch(buffer_size=AUTOTUNE)
-    # valid_ds = valid_ds.cache().prefetch(buffer_size=AUTOTUNE)
-    ############################################################
-    
+  
     return train_ds, valid_ds, test_ds
 
 
@@ -129,18 +122,10 @@ def trainer(model_type, num_classes, epochs, train_ds, valid_ds, gcp):
         Flag for training on gcp platform
 
     '''
-   
-    #---------------------------
-    # MODEL DEFENITIONS
-    #---------------------------
-    
+     
     model = model_definition(num_classes=num_classes, model_type=model_type)
     
-    #---------------------------
-    # SETTING UP CALLBACKS 
-    #---------------------------
-
-    
+    # SETTING UP CALLBACKS   
     log_dir = "tb_callback_dir/" + datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
 
     if gcp:
