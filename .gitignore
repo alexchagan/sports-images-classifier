@@ -2,6 +2,9 @@
 *.json
 *.jpg
 *.png
+*.h5
+*.lnk
+*.csv
 
 # Directories
 training_results/

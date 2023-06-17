@@ -5,9 +5,8 @@ from keras.applications.efficientnet import EfficientNetB3
 from keras import regularizers
 from keras.optimizers import Adamax
 
-#---------------------------
-# PRE-PROCSSESING LAYERS
-#---------------------------
+
+# Preprocessing layers
 
 rescale = Sequential()
 rescale.add(Rescaling(1./255))
@@ -18,9 +17,8 @@ data_augment.add(RandomRotation(0.2))
 data_augment.add(RandomContrast(0.2))
 data_augment.add(RandomZoom(0.2))
 
-#---------------------------
-# MODEL DEFENITIONS
-#---------------------------
+
+# Model definition
 
 def custom_model(image_size, num_classes):
 
@@ -122,7 +120,6 @@ def enetb3_model(image_size, num_classes):
     model.add(Dense(256, activation='relu', kernel_regularizer=regularizers.l1(0.006), activity_regularizer=regularizers.l1(0.006), bias_regularizer=regularizers.l1(0.006)))
     model.add(Dropout(0.4))
     model.add(Dense(num_classes, activation='softmax'))
-
     model.compile(Adamax(learning_rate=0.001), loss='sparse_categorical_crossentropy', metrics=['accuracy'])
 
     return model

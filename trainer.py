@@ -1,4 +1,4 @@
-from data_handler import download_data_to_local_directory
+from data_handler import download_from_kaggle
 from utilities import tr_plot, class_distribution_print_and_csv, makefolder
 from model_arch import custom_model, vgg_model, enetb3_model
 from inference import predictor
@@ -13,17 +13,15 @@ from tensorflow.python.client import device_lib
 import argparse
 import os
 from tensorflow import keras
+import glob_vars as gv
 
 warnings.filterwarnings(action='ignore',category=DeprecationWarning)
 warnings.filterwarnings(action='ignore',category=FutureWarning)
 
-num_classes = 100
-IMAGE_SIZE = 224
-
 print("Tensorflow is running on following devices : ")
 print(device_lib.list_local_devices())
 
-def prepare_dataset(visualize, batch_size):
+def prepare_dataset(batch_size):
 
     '''Prepares the datasets for training and validation and prints class distribution  
     
@@ -41,44 +39,18 @@ def prepare_dataset(visualize, batch_size):
 
     '''
 
-    # IMPORTING DATASETS
-    train_ds=image_dataset_from_directory("./sports-classifier-data/train",batch_size=batch_size,image_size=(IMAGE_SIZE,IMAGE_SIZE),seed=56)
-    test_ds=image_dataset_from_directory("./sports-classifier-data/test",batch_size=batch_size,image_size=(IMAGE_SIZE,IMAGE_SIZE),seed=56)
-    valid_ds=image_dataset_from_directory("./sports-classifier-data/valid",batch_size=batch_size,image_size=(IMAGE_SIZE,IMAGE_SIZE),seed=56)
+    train_ds=image_dataset_from_directory("./sports_classifier_data/train",batch_size=batch_size,image_size=gv.IMAGE_SIZE,seed=56)
+    test_ds=image_dataset_from_directory("./sports_classifier_data/test",batch_size=batch_size,image_size=gv.IMAGE_SIZE,seed=56)
+    valid_ds=image_dataset_from_directory("./sports_classifier_data/valid",batch_size=batch_size,image_size=gv.IMAGE_SIZE,seed=56)
 
-    class_df = pd.read_csv('./sports-classifier-data/sports.csv')
+    class_df = pd.read_csv('./sports_classifier_data/sports.csv')
     train_df = class_df[class_df['data set'] == 'train']
     class_distribution_print_and_csv(train_df, 'labels')
-
-    class_names=train_ds.class_names
-   
-    if visualize:
-    # HAVING A LOOK AT THE IMAGES OF TEST DATA
-        plt.figure(figsize=(10,10))
-        for images, labels in test_ds.take(1):
-            for i in range(9):
-                ax=plt.subplot(3, 3, i+1)
-                plt.imshow(images[i].numpy().astype("uint8"))
-                plt.title(class_names[labels[i]])
-                plt.axis("off")
-        plt.show()
-
-        for image_batch, labels_batch in train_ds:
-            print(image_batch.shape)
-            print(labels_batch.shape)
-            break
-
-    ############## FAST PROCESSING  (NOT STABLE) ############### 
-    ############################################################      
-    # AUTOTUNE = tf.data.AUTOTUNE
-    # train_ds = train_ds.cache().prefetch(buffer_size=AUTOTUNE)
-    # valid_ds = valid_ds.cache().prefetch(buffer_size=AUTOTUNE)
-    ############################################################
     
     return train_ds, valid_ds, test_ds
 
 
-def model_definition(num_classes, model_type):
+def model_definition():
 
     '''Defines a compiled model architecture based on the stated model type   
     
@@ -96,20 +68,16 @@ def model_definition(num_classes, model_type):
 
     '''
 
-    if model_type == 'custom':
-        model = custom_model(image_size=IMAGE_SIZE, num_classes=num_classes)
+    if gv.MODEL_ARCH == 'vgg':
+        return vgg_model(image_size=gv.IMAGE_SIZE[0], num_classes=gv.NUM_CLASSES)
+    
+    elif gv.MODEL_ARCH == "enetb3":
+       return enetb3_model(image_size=gv.IMAGE_SIZE[0], num_classes=gv.NUM_CLASSES)
 
-           
-    if model_type == 'vgg':
-        model = vgg_model(image_size=IMAGE_SIZE, num_classes=num_classes)
+    else:
+       return custom_model(image_size=gv.IMAGE_SIZE[0], num_classes=gv.NUM_CLASSES)
 
-        
-    if model_type == "enetb3":
-       model = enetb3_model(image_size=IMAGE_SIZE, num_classes=num_classes)
-
-    return model
-
-def trainer(model_type, num_classes, epochs, train_ds, valid_ds, gcp):
+def trainer(epochs, train_ds, valid_ds, gcp):
 
     '''Trains a CNN model based on the requested architecture 
     
@@ -129,18 +97,9 @@ def trainer(model_type, num_classes, epochs, train_ds, valid_ds, gcp):
         Flag for training on gcp platform
 
     '''
-   
-    #---------------------------
-    # MODEL DEFENITIONS
-    #---------------------------
-    
-    model = model_definition(num_classes=num_classes, model_type=model_type)
-    
-    #---------------------------
-    # SETTING UP CALLBACKS 
-    #---------------------------
+     
+    model = model_definition()  
 
-    
     log_dir = "tb_callback_dir/" + datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
 
     if gcp:
@@ -172,26 +131,16 @@ def trainer(model_type, num_classes, epochs, train_ds, valid_ds, gcp):
 if __name__ == '__main__':
 
     parser = argparse.ArgumentParser()
-    parser.add_argument("--bucket_name", type=str, help="Bucket name on google cloud storage", default='sports-classifier-bucket')
     parser.add_argument("--batch_size", type=int, help="Batch size used by deep learning model", default=16)
     parser.add_argument("--epochs" , type=int, help="Number of epochs for training", default=40 )
-    parser.add_argument("--download_data" , type=bool, help="Download dataset from google cloud storage bucket", default=False)
-    parser.add_argument("--dummy_data" , type=bool, help="Download dummy data for testing", default=False)
     parser.add_argument("--gcp_training" , type=bool, help="Train on gcp vertex ai if true, train locally if false", default=False)
     args = parser.parse_args()
 
+    download_from_kaggle()
 
-    if args.download_data:
-        if args.dummy_data:
-             download_data_to_local_directory('sports-classifier-bucket-dummy', './sports-classifier-data')
-        else:
-            download_data_to_local_directory(args.bucket_name, './sports-classifier-data')
+    train_ds, valid_ds, test_ds = prepare_dataset(batch_size=args.batch_size)
 
-    train_ds, valid_ds, test_ds = prepare_dataset(visualize=False, batch_size=args.batch_size)
-
-    model_type = 'enetb3'
-
-    trainer(model_type=model_type,num_classes=num_classes, train_ds=train_ds, valid_ds=valid_ds, epochs=args.epochs, gcp=args.gcp_training)
+    trainer(train_ds=train_ds, valid_ds=valid_ds, epochs=args.epochs, gcp=args.gcp_training)
 
     model = keras.models.load_model('training_results/best.h5')
 

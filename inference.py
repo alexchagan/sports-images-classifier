@@ -8,9 +8,7 @@ from tensorflow import keras
 from keras.utils import image_dataset_from_directory
 from keras.utils import image_utils
 from utilities import makefolder
-
-batch_size = 16
-IMAGE_SIZE = 224
+import glob_vars as gv
 
 def load_image(path, image_size=(224, 224), num_channels=3, interpolation='bilinear'):
   """Load an image from a path and resize it."""
@@ -98,20 +96,38 @@ def create_class_to_name_dict(test_ds):
 
 def predict_on_image(model, image_url, class_name_dict):
 
+    '''Makes a prediction on a single image  
+    
+    Parameters
+    ---------- 
+    model : Sequential
+        A trained model  
+    image_url : string
+        The path to the image
+    class_name_dict : dict
+        A dict with corresponding integers and class names
+
+    Returns
+    ----------
+    class_name : string
+        The name of the predicted class
+
+    '''
+
     image = load_image(path=image_url) # preprocessing
     image = np.expand_dims(image, axis=0) # the model was trained on batches so we need to expand to (1,244,244,3)
     pred = model.predict(image)
     pred_class = np.argmax(pred)
-    return class_name_dict[pred_class]
+    class_name = class_name_dict[pred_class]
+    return class_name
 
 if __name__ == '__main__':
 
-    test_ds = image_dataset_from_directory("./sports-classifier-data/test", batch_size=batch_size, image_size=(IMAGE_SIZE,IMAGE_SIZE), seed=56)
+    test_ds = image_dataset_from_directory("./sports_classifier_data/test", batch_size=gv.BATCH_SIZE, image_size=gv.IMAGE_SIZE, seed=56)
     model = keras.models.load_model('training_results/best.h5')
     class_name_dict = create_class_to_name_dict(test_ds)
-    # predictor(model, test_ds)
-    ans = predict_on_image(model, "test.jpg", class_name_dict)
-    print(ans)
+    predictor(model, test_ds)
+    
     
 
     

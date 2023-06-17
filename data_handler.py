@@ -1,8 +1,13 @@
 from google.cloud import storage
 import os
-
-
+import json
+import glob_vars as gv
+from utilities import makefolder
 path_to_credentials = './credentials/feisty-album-369005-086941277569.json'
+
+os.environ['KAGGLE_USERNAME'] = gv.KAGGLE_USERNAME
+os.environ['KAGGLE_KEY'] = gv.KAGGLE_KEY
+import kaggle
 
 def list_blobs(bucket_name):
 
@@ -21,9 +26,7 @@ def list_blobs(bucket_name):
     '''
 
     storage_client = storage.Client.from_service_account_json(path_to_credentials)
-
     blobs = storage_client.list_blobs(bucket_name)
-
     return blobs
 
 def download_data_to_local_directory(bucket_name, local_dir):
@@ -52,16 +55,36 @@ def download_data_to_local_directory(bucket_name, local_dir):
         if os.path.basename(joined_path) == '': # if the file is a folder
             if not os.path.isdir(joined_path): # check if the folder already exist
                 os.makedirs(joined_path)
-        
         else: # if the file is an image
             if not os.path.isfile(joined_path): # check if the file already exist
                 if not os.path.isdir(os.path.dirname(joined_path)): # check if the folder of the class exist
                     os.makedirs(os.path.dirname(joined_path))
                 blob.download_to_filename(joined_path)
 
+def download_from_kaggle():
+
+    '''Downloads data from kaggle and store is it in a local directory'''
+
+    if os.path.exists('sports_classifier_data'):
+        print('Data already exists, no need to download again.')
+        return
+    
+    makefolder('sports_classifier_data')
+    makefolder(".kaggle")
+    _ = open(".kaggle/kaggle.json","w")
+    api_token = {"username":gv.KAGGLE_USERNAME,"key":gv.KAGGLE_KEY}
+
+    with open('.kaggle/kaggle.json','w') as file:
+        json.dump(api_token,file)
+
+    os.chmod(".kaggle/kaggle.json",600)
+
+    kaggle.api.authenticate()
+    kaggle.api.dataset_download_files('gpiosenka/sports-classification', path='sports_classifier_data', unzip=True, force=True)
+
 
 
 if __name__ == '__main__':
 
-    download_data_to_local_directory('sports-classifier-bucket', './sports-classifier-data')
-    
+    download_from_kaggle()
+   
