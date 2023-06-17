@@ -3,7 +3,7 @@ import os
 import json
 import glob_vars as gv
 from utilities import makefolder
-path_to_credentials = './credentials/feisty-album-369005-086941277569.json'
+path_to_credentials = ""
 
 os.environ['KAGGLE_USERNAME'] = gv.KAGGLE_USERNAME
 os.environ['KAGGLE_KEY'] = gv.KAGGLE_KEY
