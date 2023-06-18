@@ -53,6 +53,7 @@ def class_distribution_print_and_csv(train_df, column_name):
         classlist.append(label)
         print('{0:^30s} {1:^13s}'.format(label, str(len(group))))
     csv_output = np.column_stack((classlist,countlist))
+    makefolder('training_results')
     np.savetxt('training_results/class_distribution.csv',csv_output, fmt='%s')
     max_value=np.max(countlist)
     max_index=countlist.index(max_value)
