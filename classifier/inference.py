@@ -19,7 +19,9 @@ class Predictor:
         self.model = tf.keras.models.load_model(model_path, custom_objects={"F1_score": Metrics.F1_score})
 
     def load_image(self, path, num_channels=3, interpolation='bilinear'):
+        
         """Load an image from a path and resize it."""
+
         img = tf.io.read_file(path)
         img = tf.image.decode_image(img, channels=num_channels, expand_animations=False)
         img = tf.image.resize(img, self.image_size, method=interpolation)
@@ -75,10 +77,8 @@ class Predictor:
         true_labels = tf.concat([item for item in y_true], axis = 0)
         predicted_labels = tf.concat([item for item in y_pred], axis = 0)
 
-        clr = classification_report(true_labels, predicted_labels, target_names=classes, digits= 4)
+        _ = classification_report(true_labels, predicted_labels, target_names=classes, digits= 4)
         clr_csv = classification_report(true_labels, predicted_labels, target_names=classes, digits= 4, output_dict=True)
-
-        print("Classification Report:\n----------------------\n", clr)
 
         report_df = pd.DataFrame(clr_csv).transpose()
         report_df.to_csv('inference_results/inference_report.csv')

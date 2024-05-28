@@ -5,8 +5,6 @@ from keras import regularizers
 from keras.optimizers import Adamax
 from metrics import Metrics
 
-
-
 class ModelArchitecture:
 
     def __init__(self, image_size, num_of_classes, model_name, learning_rate):
@@ -17,59 +15,7 @@ class ModelArchitecture:
         self.learning_rate = learning_rate
         self.model = None
 
-    # def set_enetb3_model(self):
-        
-    #     '''An architecture based on pretrained EnetB3 CNN
-        
-    #     Parameters
-    #     ----------
-    #     image_size : int
-    #         The size of image, height and width are same value
-    #     num_class : int
-    #         The number of classes for prediction
-
-    #     Returns
-    #     ----------
-    #     model : Sequential
-    #         A conifugred model ready for training
-
-    #     '''
-    #     # Normalization is included in the as part of the model, rescaling to [0,1] is not needed.
-    #     b3 = EfficientNetB3(include_top=False, weights='imagenet',pooling='max', input_shape=(self.image_size, self.image_size, 3))
-    #     b3.trainable = True
-
-    #     self.model = Sequential()
-    #     self.model.add(b3)
-    #     self.model.add(BatchNormalization(axis=-1, momentum=0.99, epsilon=0.001))
-    #     self.model.add(Dense(256, activation='relu', kernel_regularizer=regularizers.l1(0.006), activity_regularizer=regularizers.l1(0.006), bias_regularizer=regularizers.l1(0.006)))
-    #     self.model.add(Dropout(0.4))
-    #     self.model.add(Dense(self.num_classes, activation='softmax'))
-    #     self.model.compile(Adamax(learning_rate=0.001), loss='sparse_categorical_crossentropy', metrics=['accuracy'])
-    
-   
-    # def F1_score(y_true, y_pred): 
-
-    #     '''define a function to compute the F1_score metric'''
-
-    #     K = tf.keras.backend.backend()
-    #     true_positives = K.sum(K.round(K.clip(y_true * y_pred, 0, 1)))
-    #     possible_positives = K.sum(K.round(K.clip(y_true, 0, 1)))
-    #     predicted_positives = K.sum(K.round(K.clip(y_pred, 0, 1)))
-    #     precision = true_positives / (predicted_positives + K.epsilon())
-    #     recall = true_positives / (possible_positives + K.epsilon())
-    #     f1_val = 2*(precision*recall)/(precision+recall+K.epsilon())
-    #     return f1_val
-
     def make_model(self): 
-
-        def F1_score(y_true, y_pred):
-            true_positives = tf.keras.backend.sum(tf.keras.backend.round(tf.keras.backend.clip(y_true * y_pred, 0, 1)))
-            possible_positives = tf.keras.backend.sum(tf.keras.backend.round(tf.keras.backend.clip(y_true, 0, 1)))
-            predicted_positives = tf.keras.backend.sum(tf.keras.backend.round(tf.keras.backend.clip(y_pred, 0, 1)))
-            precision = true_positives / (predicted_positives + tf.keras.backend.epsilon())
-            recall = true_positives / (possible_positives + tf.keras.backend.epsilon())
-            f1_val = 2 * (precision * recall) / (precision + recall + tf.keras.backend.epsilon())
-            return f1_val
 
         image_shape=(self.image_size[0], self.image_size[1], 3)
 
