@@ -4,6 +4,7 @@ import time
 # Implementation is taken from a kaggle notebook: https://www.kaggle.com/code/gpiosenka/custom-callback-to-continue-or-stop-training/notebook
 
 class ASK(keras.callbacks.Callback):
+    
     def __init__ (self, model, epochs,  ask_epoch): # initialization of the callback
         super(ASK, self).__init__()
         self.model=model               

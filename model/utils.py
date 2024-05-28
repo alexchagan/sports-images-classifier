@@ -3,8 +3,6 @@ import numpy as np
 import seaborn as sns
 import os
 
-
-
 def class_distribution_plt(train_df, column_name):
     
     '''Plots distribution of classes in the training dataframe and saves it as a jpg 
@@ -26,7 +24,7 @@ def class_distribution_plt(train_df, column_name):
     plt.tight_layout()
     plt.savefig('class_distribution.jpg')
 
-def class_distribution_print_and_csv(train_df, column_name):
+def print_class_distribution(train_df, column_name):
 
     '''Prints the class distribution in console and saves it as a csv file 
        in training_results folder

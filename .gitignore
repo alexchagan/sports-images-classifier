@@ -5,12 +5,14 @@
 *.h5
 *.lnk
 *.csv
+*.kaggle
 
 # Directories
 training_results/
 tb_callback_dir/
 credentials/
 inference_results/
+data/
 .venv/
 .vscode/
 
