@@ -3,6 +3,7 @@ from keras.layers import Dense, Dropout, BatchNormalization
 from keras.applications.efficientnet import EfficientNetB3
 from keras import regularizers
 from keras.optimizers import Adamax
+from metrics import Metrics
 
 
 
@@ -104,7 +105,7 @@ class ModelArchitecture:
         x=Dropout(rate=.4, seed=123)(x)       
         output=Dense(self.num_of_classes, activation='softmax')(x)
         self.model=tf.keras.Model(inputs=base_model.input, outputs=output)
-        self.model.compile(Adamax(learning_rate=self.learning_rate), loss='categorical_crossentropy', metrics=['accuracy', F1_score]) 
+        self.model.compile(Adamax(learning_rate=self.learning_rate), loss='categorical_crossentropy', metrics=['accuracy', Metrics.F1_score]) 
         msg=msg + f' with initial learning rate set to {self.learning_rate}'
         print(msg)
         return self.model

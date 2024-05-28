@@ -8,14 +8,15 @@ from tensorflow import keras
 from keras.utils import image_dataset_from_directory
 from utils import makefolder
 import global_vars as gv
+from metrics import Metrics
 
 class Predictor:
 
-    def __init__(self, test_ds, image_size, model):
+    def __init__(self, test_ds, image_size, model_path):
         self.test_ds = test_ds
         self.image_size = image_size
-        self.model = model
         self.class_names_dict = {}
+        self.model = tf.keras.models.load_model(model_path, custom_objects={"F1_score": Metrics.F1_score})
 
     def load_image(self, path, num_channels=3, interpolation='bilinear'):
         """Load an image from a path and resize it."""

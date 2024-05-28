@@ -32,12 +32,10 @@ if __name__ == '__main__':
     model = model_arch.make_model()
 
     trainer = Trainer(train_gen=train_gen, valid_gen=valid_gen, model=model, epochs=gv.EPOCHS)
-    
     trainer.train()
 
-    # trained_model = keras.models.load_model('training_results/best.h5')
-
-    # predictor = Predictor(test_ds=test_ds, image_size=gv.IMAGE_SIZE, model=trained_model)
-    # predictor.predict()
+    test_ds = data_handler.get_test_dataset()
+    predictor = Predictor(test_ds=test_ds, image_size=gv.IMAGE_SIZE, model_path='training_results/best.h5')
+    predictor.predict()
 
 
