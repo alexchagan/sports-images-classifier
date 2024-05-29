@@ -4,10 +4,7 @@ import numpy as np
 import pandas as pd
 from sklearn.metrics import confusion_matrix, classification_report
 import tensorflow as tf
-from tensorflow import keras
-from keras.utils import image_dataset_from_directory
 from utils import makefolder
-import global_vars as gv
 from metrics import Metrics
 
 class Predictor:
@@ -95,15 +92,6 @@ class Predictor:
         plt.show()
         plt.savefig('inference_results/matrix.jpg')
 
-    
-
-if __name__ == '__main__':
-
-    test_ds = image_dataset_from_directory("./sports_classifier_data/test", batch_size=gv.BATCH_SIZE, image_size=gv.IMAGE_SIZE, seed=56)
-    model = keras.models.load_model('training_results/best.h5')
-    predictor = Predictor(test_ds=test_ds, image_size=(224,224), model=model)
-    predictor.create_class_to_name_dict()
-    predictor.predict(model, test_ds)
     
     
 

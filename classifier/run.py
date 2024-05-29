@@ -1,4 +1,3 @@
-import global_vars as gv
 import warnings
 from tensorflow.python.client import device_lib
 from data_handler import DataHandler
@@ -7,6 +6,7 @@ from model_arch import ModelArchitecture
 from inference import Predictor
 from dotenv import load_dotenv
 import os
+import yaml
 
 load_dotenv()
 
@@ -21,7 +21,7 @@ print("Tensorflow is running on following devices : ")
 print(device_lib.list_local_devices())
 
 
-def data_preparation():
+def data_preparation(data_handler : DataHandler):
     """
     Prepare the datasets for training and testing.
     Returns:
@@ -30,61 +30,82 @@ def data_preparation():
         test_ds (tf.data.Dataset): Test dataset.
     """
 
-    DataHandler.download_from_kaggle(
-        os.getenv("DATASET_OWNER"), os.getenv("DATASET_NAME")
-    )
-    data_handler = DataHandler(batch_size=gv.BATCH_SIZE, image_size=gv.IMAGE_SIZE, balance_classes=True)
+    DataHandler.download_from_kaggle(os.getenv("DATASET_OWNER"), os.getenv("DATASET_NAME"))
     data_handler.prepare_datasets()
     train_gen, valid_gen = data_handler.define_generators()
     test_ds = data_handler.get_test_dataset()
     return train_gen, valid_gen, test_ds
 
 
-def model_preparation():
+def model_preparation(model_arch : ModelArchitecture):
     """
     Prepare the model architecture.
     Returns:
         model (tf.keras.Model): Compiled model.
     """
 
-    model_arch = ModelArchitecture(
-        image_size=gv.IMAGE_SIZE,
-        num_of_classes=gv.NUM_CLASSES,
-        learning_rate=gv.LEARNING_RATE,
-        model_name=gv.MODEL_NAME,
-    )
-    model = model_arch.make_model()
-    return model
+    return model_arch.make_model()
+    
 
-
-def train_model(train_gen, valid_gen, model):
+def train_model(trainer : Trainer):
     """
     Train the model and save it locally.
-    Args:
-        train_gen (DataGenerator): Training data generator.
-        valid_gen (DataGenerator): Validation data generator.
-        model (tf.keras.Model): Compiled model.
     """
 
-    trainer = Trainer(train_gen=train_gen, valid_gen=valid_gen, model=model, epochs=gv.EPOCHS)
     trainer.train()
 
 
-def inference_model(test_ds, model_path):
+def inference_model(predictor : Predictor):
     """
     Perform inference on the test dataset using the trained model.
-    Args:
-        test_ds (tf.data.Dataset): The test dataset to perform inference on.
-        model_path (str): The path to the trained model file.
     """
 
-    predictor = Predictor(test_ds=test_ds, image_size=gv.IMAGE_SIZE, model_path=model_path)
     predictor.predict()
 
 
 if __name__ == "__main__":
 
-    train_gen, valid_gen, test_ds = data_preparation()
-    model = model_preparation()
-    train_model(train_gen, valid_gen, model)
-    inference_model(test_ds, "training_results/best.h5")
+   
+    with open('config.yaml', 'r') as file:
+        config = yaml.safe_load(file)
+
+    epochs = config['epochs']
+    batch_size = config['batch_size']
+    image_size = tuple(config['image_size'])
+    num_of_classes = config['num_of_classes']
+    model_name = config['model_name']
+    learning_rate = config['learning_rate']
+
+    data_handler = DataHandler(
+        batch_size=batch_size, 
+        image_size=image_size, 
+        balance_classes=True
+    )
+    train_gen, valid_gen, test_ds = data_preparation(data_handler)
+
+    model_arch = ModelArchitecture(
+        image_size=image_size,
+        num_of_classes=num_of_classes,
+        learning_rate=learning_rate,
+        model_name=model_name
+    )
+    model = model_preparation(model_arch)
+
+    trainer = Trainer(
+        train_gen=train_gen,
+        valid_gen=valid_gen,
+        model=model, 
+        epochs=epochs
+    )
+    train_model(trainer)
+
+    predictor = Predictor(
+        test_ds=test_ds, 
+        image_size=image_size, 
+        model_path='training_results/best.h5'
+    )
+    inference_model(predictor)
+
+
+
+   

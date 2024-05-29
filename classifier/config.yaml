@@ -1,0 +1,6 @@
+epochs: 40
+batch_size: 16
+image_size: [224, 224]
+num_of_classes: 100
+model_name: EfficientNetV2B2
+learning_rate: 0.001
