@@ -5,7 +5,8 @@
 *.h5
 *.lnk
 *.csv
-*.kaggle
+.kaggle
+mlruns
 
 # Directories
 training_results/
