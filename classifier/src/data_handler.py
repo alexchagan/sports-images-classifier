@@ -26,12 +26,7 @@ class DataHandler:
         self._valid_df = None
         self._train_gen = None
         self._valid_gen = None
-        self._test_ds = image_dataset_from_directory(
-            "./data/test",
-            batch_size=self._batch_size,
-            image_size=self._image_size,
-            seed=56,
-        )
+        self._test_ds = None
 
     @staticmethod
     def download_from_kaggle(user, dataset):
@@ -105,6 +100,13 @@ class DataHandler:
                     faulty_images.append(img_path)
 
             df.drop(df[df["filepaths"].isin(faulty_images)].index, inplace=True)
+        
+        self._test_ds = image_dataset_from_directory(
+            "./data/test",
+            batch_size=self._batch_size,
+            image_size=self._image_size,
+            seed=56,
+        )
 
     def define_generators(self):
         gen = tf.keras.preprocessing.image.ImageDataGenerator()
