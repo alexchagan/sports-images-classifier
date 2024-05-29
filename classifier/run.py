@@ -50,7 +50,7 @@ def inference_model(predictor : Predictor):
 
 if __name__ == "__main__":
 
-    with open('config.yaml', 'r') as file:
+    with open('../config.yaml', 'r') as file:
         config = yaml.safe_load(file)
 
     epochs = config['epochs']
