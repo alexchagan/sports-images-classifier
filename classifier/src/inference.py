@@ -4,8 +4,8 @@ import numpy as np
 import pandas as pd
 from sklearn.metrics import confusion_matrix, classification_report
 import tensorflow as tf
-from utils import makefolder
-from metrics import Metrics
+from src.utils import makefolder
+from src.metrics import Metrics
 
 class Predictor:
 

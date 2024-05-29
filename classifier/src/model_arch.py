@@ -3,7 +3,7 @@ from keras.layers import Dense, Dropout, BatchNormalization
 from keras.applications.efficientnet import EfficientNetB3
 from keras import regularizers
 from keras.optimizers import Adamax
-from metrics import Metrics
+from src.metrics import Metrics
 
 class ModelArchitecture:
 

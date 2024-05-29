@@ -1,25 +1,10 @@
-import warnings
-from tensorflow.python.client import device_lib
-from data_handler import DataHandler
-from trainer import Trainer
-from model_arch import ModelArchitecture
-from inference import Predictor
-from dotenv import load_dotenv
+import src as src
+from src.data_handler import DataHandler
+from src.trainer import Trainer
+from src.model_arch import ModelArchitecture
+from src.inference import Predictor
 import os
 import yaml
-
-load_dotenv()
-
-os.environ["KAGGLE_USERNAME"] = os.getenv("KAGGLE_USERNAME")
-os.environ["KAGGLE_KEY"] = os.getenv("KAGGLE_KEY")
-os.chmod(".kaggle/kaggle.json", 600)
-
-warnings.filterwarnings(action="ignore", category=DeprecationWarning)
-warnings.filterwarnings(action="ignore", category=FutureWarning)
-
-print("Tensorflow is running on following devices : ")
-print(device_lib.list_local_devices())
-
 
 def data_preparation(data_handler : DataHandler):
     """
@@ -65,7 +50,6 @@ def inference_model(predictor : Predictor):
 
 if __name__ == "__main__":
 
-   
     with open('config.yaml', 'r') as file:
         config = yaml.safe_load(file)
 

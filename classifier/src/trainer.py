@@ -1,7 +1,7 @@
 import datetime
-from utils import tr_plot, makefolder
+from src.utils import tr_plot, makefolder
 import tensorflow as tf
-from ask_callback import ASK
+from src.ask_callback import ASK
 import mlflow
 import mlflow.tensorflow
 

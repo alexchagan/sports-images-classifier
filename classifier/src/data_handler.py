@@ -1,10 +1,9 @@
 from keras.utils import image_dataset_from_directory
 
-from utils import print_class_distribution, makefolder
+from src.utils import print_class_distribution, makefolder
 import tensorflow as tf
 
 import os
-from utils import makefolder
 import kaggle
 import pandas as pd
 import albumentations as A
