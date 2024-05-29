@@ -13,10 +13,10 @@ from metrics import Metrics
 class Predictor:
 
     def __init__(self, test_ds, image_size, model_path):
-        self.test_ds = test_ds
-        self.image_size = image_size
-        self.class_names_dict = {}
-        self.model = tf.keras.models.load_model(model_path, custom_objects={"F1_score": Metrics.F1_score})
+        self._test_ds = test_ds
+        self._image_size = image_size
+        self._class_names_dict = {}
+        self._model = tf.keras.models.load_model(model_path, custom_objects={"F1_score": Metrics.F1_score})
 
     def load_image(self, path, num_channels=3, interpolation='bilinear'):
         
@@ -24,19 +24,19 @@ class Predictor:
 
         img = tf.io.read_file(path)
         img = tf.image.decode_image(img, channels=num_channels, expand_animations=False)
-        img = tf.image.resize(img, self.image_size, method=interpolation)
-        img.set_shape((self.image_size[0], self.image_size[1], num_channels))
+        img = tf.image.resize(img, self._image_size, method=interpolation)
+        img.set_shape((self._image_size[0], self._image_size[1], num_channels))
         return img
 
     def create_class_to_name_dict(self):
         
         ''' Creates a dict with keys - lass integer values, values - names of classes '''
 
-        classes = self.test_ds.class_names
-        self.class_name_dict = {}
+        classes = self._test_ds.class_names
+        self._class_name_dict = {}
         index = 0
         for cl in classes:
-            self.class_name_dict[index] = cl
+            self._class_name_dict[index] = cl
             index += 1
 
     def predict_on_image(self, image_url):
@@ -45,9 +45,9 @@ class Predictor:
 
         image = self.load_image(path=image_url) 
         image = np.expand_dims(image, axis=0) # the model was trained on batches so we need to expand to (1,244,244,3)
-        pred = self.model.predict(image)
+        pred = self._model.predict(image)
         pred_class = np.argmax(pred)
-        class_name = self.class_name_dict[pred_class]
+        class_name = self._class_name_dict[pred_class]
         return class_name
     
     def predict(self):
@@ -63,14 +63,14 @@ class Predictor:
         y_true = []
         y_pred = []
 
-        classes = self.test_ds.class_names
+        classes = self._test_ds.class_names
         class_count = len(classes)
 
-        for image_batch, label_batch in self.test_ds:   
+        for image_batch, label_batch in self._test_ds:   
             # append true labels
             y_true.append(label_batch)
             # compute predictions
-            preds = self.model.predict(image_batch)
+            preds = self._model.predict(image_batch)
             # append predicted labels
             y_pred.append(np.argmax(preds, axis = - 1))
         

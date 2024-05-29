@@ -33,9 +33,7 @@ def data_preparation():
     DataHandler.download_from_kaggle(
         os.getenv("DATASET_OWNER"), os.getenv("DATASET_NAME")
     )
-    data_handler = DataHandler(
-        batch_size=gv.BATCH_SIZE, image_size=gv.IMAGE_SIZE, balance_classes=True
-    )
+    data_handler = DataHandler(batch_size=gv.BATCH_SIZE, image_size=gv.IMAGE_SIZE, balance_classes=True)
     data_handler.prepare_datasets()
     train_gen, valid_gen = data_handler.define_generators()
     test_ds = data_handler.get_test_dataset()
@@ -68,9 +66,7 @@ def train_model(train_gen, valid_gen, model):
         model (tf.keras.Model): Compiled model.
     """
 
-    trainer = Trainer(
-        train_gen=train_gen, valid_gen=valid_gen, model=model, epochs=gv.EPOCHS
-    )
+    trainer = Trainer(train_gen=train_gen, valid_gen=valid_gen, model=model, epochs=gv.EPOCHS)
     trainer.train()
 
 
@@ -82,9 +78,7 @@ def inference_model(test_ds, model_path):
         model_path (str): The path to the trained model file.
     """
 
-    predictor = Predictor(
-        test_ds=test_ds, image_size=gv.IMAGE_SIZE, model_path=model_path
-    )
+    predictor = Predictor(test_ds=test_ds, image_size=gv.IMAGE_SIZE, model_path=model_path)
     predictor.predict()
 
 

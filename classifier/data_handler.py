@@ -20,17 +20,17 @@ class DataHandler:
     # TODO: automatically determaine if balance_classes should be True based on the distribution of classes
     # TODO: change test_ds to test_df -> test_gen
     def __init__(self, batch_size, image_size, balance_classes):
-        self.image_size = image_size
-        self.batch_size = batch_size
-        self.balance_classes = balance_classes
-        self.train_df = None
-        self.valid_df = None
-        self.train_gen = None
-        self.valid_gen = None
-        self.test_ds = image_dataset_from_directory(
+        self._image_size = image_size
+        self._batch_size = batch_size
+        self._balance_classes = balance_classes
+        self._train_df = None
+        self._valid_df = None
+        self._train_gen = None
+        self._valid_gen = None
+        self._test_ds = image_dataset_from_directory(
             "./data/test",
-            batch_size=self.batch_size,
-            image_size=self.image_size,
+            batch_size=self._batch_size,
+            image_size=self._image_size,
             seed=56,
         )
 
@@ -84,18 +84,18 @@ class DataHandler:
 
     def prepare_datasets(self):
         class_df = pd.read_csv("data/sports.csv")
-        self.train_df = class_df[class_df["data set"] == "train"]
-        self.valid_df = class_df[class_df["data set"] == "valid"]
+        self._train_df = class_df[class_df["data set"] == "train"]
+        self._valid_df = class_df[class_df["data set"] == "valid"]
 
-        self.train_df["filepaths"] = "data/" + self.train_df["filepaths"]
-        self.valid_df["filepaths"] = "data/" + self.valid_df["filepaths"]
+        self._train_df["filepaths"] = "data/" + self._train_df["filepaths"]
+        self._valid_df["filepaths"] = "data/" + self._valid_df["filepaths"]
 
-        if self.balance_classes:
-            self.train_df = self.balance(n=200, column="labels", working_dir="data")
+        if self._balance_classes:
+            self._train_df = self.balance(n=200, column="labels", working_dir="data")
 
         # Find faulty images and remove them from dataframe
 
-        for df in [self.train_df, self.valid_df]:
+        for df in [self._train_df, self._valid_df]:
             faulty_images = []
             for _, row in df.iterrows():
                 img_path = row["filepaths"]
@@ -110,33 +110,33 @@ class DataHandler:
     def define_generators(self):
         gen = tf.keras.preprocessing.image.ImageDataGenerator()
         ycol = "labels"
-        self.train_gen = gen.flow_from_dataframe(
-            self.train_df,
+        self._train_gen = gen.flow_from_dataframe(
+            self._train_df,
             x_col="filepaths",
             y_col=ycol,
-            target_size=self.image_size,
+            target_size=self._image_size,
             seed=123,
             class_mode="categorical",
             color_mode="rgb",
             shuffle=True,
-            batch_size=self.batch_size,
+            batch_size=self._batch_size,
             validate_filenames=False,
         )
 
-        self.valid_gen = gen.flow_from_dataframe(
-            self.valid_df,
+        self._valid_gen = gen.flow_from_dataframe(
+            self._valid_df,
             x_col="filepaths",
             y_col=ycol,
-            target_size=self.image_size,
+            target_size=self._image_size,
             seed=123,
             class_mode="categorical",
             color_mode="rgb",
             shuffle=False,
-            batch_size=self.batch_size,
+            batch_size=self._batch_size,
             validate_filenames=False,
         )
 
-        return self.train_gen, self.valid_gen
+        return self._train_gen, self._valid_gen
 
     def balance(self, n, column, working_dir):
         def get_augmented_image(image):
@@ -153,7 +153,7 @@ class DataHandler:
             )
             return transform(image=image)["image"]
 
-        df = self.train_df.copy()
+        df = self._train_df.copy()
 
         print("Initial length of dataframe is ", len(df))
         aug_dir = os.path.join(working_dir, "aug")
@@ -207,11 +207,11 @@ class DataHandler:
         return df
 
     def get_test_dataset(self):
-        return self.test_ds
+        return self._test_ds
 
     def print_distributions(self):
-        print_class_distribution(self.train_df, "labels")
-        print_class_distribution(self.valid_df, "labels")
+        print_class_distribution(self._train_df, "labels")
+        print_class_distribution(self._valid_df, "labels")
 
 
 if __name__ == "__main__":
